@@ -1,6 +1,6 @@
 const express = require('express')
 const app = express()
-
+const PORT = process.env.PORT ? '' : ':3000'
 const bodyParser = require('body-parser')
 //body - parser 進行前置處理
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -36,16 +36,18 @@ app.post('/', (req, res) => {
   const origin_URL = req.body.origin_URL
   console.log(origin_URL)
   let varURLCode = generateCode(5)
+  const originHost = `${req.protocol}://${req.hostname}${PORT}`
+  let address = 0;
   console.log("test")
   URL.find()
     .lean()
     .then(urlcollection => {
+
       const repeatbanner = urlcollection.find(url => url.origin_URL === origin_URL)
       console.log(repeatbanner)
       if (repeatbanner) {
-
-        res.redirect('/')
-        // res.render('show', { repeatbanner })
+        address = originHost + '/' + repeatbanner.URLCode
+        res.render('show', { address })
       }
       else {
         while (urlcollection.find(url => url.URLCode === varURLCode)) {
@@ -57,14 +59,27 @@ app.post('/', (req, res) => {
           URLCode: varURLCode
         })
         return URL.create(Schmea)
-          .then(() => res.redirect('/'))
+          .then(() => {
+            address = originHost + '/' + Schmea.URLCode
+            res.redner('show', { address })
+          })
           .catch(error => console.log(error))
-
       }
     })
+    .catch(error => console.log(error))
 
 })
 
+app.get('/:code', (req, res) => {
+  const code = req.params.code
+  console.log(code)
+  return URL.find({ URLCode: code })
+    .lean()
+    .then(url => {
+      res.redirect(url[0].origin_URL)
+    })
+    .catch(error => console.log(error))
+})
 // 設定 port 3000
 app.listen(3000, () => {
   console.log('App is running on http://localhost:3000')
