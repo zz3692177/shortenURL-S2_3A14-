@@ -62,7 +62,7 @@ app.post('/', (req, res) => {
         return URL.create(Schmea)
           .then(() => {
             address = originHost + '/' + Schmea.URLCode
-            res.redner('show', { address })
+            res.render('show', { address })
           })
           .catch(error => console.log(error))
       }
