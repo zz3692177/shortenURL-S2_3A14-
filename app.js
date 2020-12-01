@@ -37,7 +37,7 @@ app.post('/', (req, res) => {
   const origin_URL = req.body.origin_URL
   console.log(origin_URL)
   let varURLCode = generateCode(5)
-  const originHost = `${req.protocol}://${req.hostname}${PORT}`
+  const originHost = `${req.protocol}://${req.hostname}:${PORT}`
   let address = 0;
   console.log("test")
   URL.find()
