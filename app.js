@@ -1,12 +1,13 @@
 const express = require('express')
 const app = express()
-const PORT = process.env.PORT ? '' : ':3000'
+const PORT = process.env.PORT || 3000
 const bodyParser = require('body-parser')
 //body - parser 進行前置處理
 app.use(bodyParser.urlencoded({ extended: true }))
 
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost/short-url'
 const mongoose = require('mongoose')
-mongoose.connect('mongodb://localhost/short-url', {
+mongoose.connect(MONGODB_URI, {
   useNewUrlParser: true, useUnifiedTopology: true
 })
 
@@ -81,8 +82,8 @@ app.get('/:code', (req, res) => {
     .catch(error => console.log(error))
 })
 // 設定 port 3000
-app.listen(3000, () => {
-  console.log('App is running on http://localhost:3000')
+app.listen(PORT, () => {
+  console.log(`App is running on http://localhost:${PORT}`)
 })
 
 
