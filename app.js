@@ -39,7 +39,6 @@ app.post('/', (req, res) => {
   let varURLCode = generateCode(5)
   const originHost = `${req.protocol}://${req.hostname}:${PORT}`
   let address = 0;
-  console.log("test")
   URL.find()
     .lean()
     .then(urlcollection => {
@@ -73,7 +72,7 @@ app.post('/', (req, res) => {
 
 app.get('/:code', (req, res) => {
   const code = req.params.code
-  console.log(code)
+  //console.log(code)
   return URL.find({ URLCode: code })
     .lean()
     .then(url => {
